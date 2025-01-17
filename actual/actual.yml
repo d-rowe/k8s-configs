@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: actual-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actual-server
+  template:
+    metadata:
+      name: actual-server
+      labels:
+        app: actual-server
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: actual-server
+          image: actualbudget/actual-server:latest-alpine
+          volumeMounts:
+            - mountPath: /data
+              name: data-volume
+          ports:
+            - containerPort: 5006
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: pvc-actual-data
