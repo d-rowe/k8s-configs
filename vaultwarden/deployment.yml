@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: vaultwarden-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden-service
+  template:
+    metadata:
+      name: vaultwarden-service
+      labels:
+        app: vaultwarden-service
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: vaultwarden-service
+          image: vaultwarden/server:latest-alpine
+          volumeMounts:
+            - mountPath: /data
+              name: data-volume
+          ports:
+            - containerPort: 80
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: pvc-vaultwarden-data
