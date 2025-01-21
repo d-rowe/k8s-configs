@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: p2piano-client
+  name: p2piano-client
+  namespace: p2piano
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.0.225
+spec:
+  ports:
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 8345
+  selector:
+    app: p2piano-client
+  type: LoadBalancer

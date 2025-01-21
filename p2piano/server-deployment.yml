@@ -1,0 +1,29 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: p2piano-server
+  namespace: p2piano
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: p2piano-server
+  template:
+    metadata:
+      name: p2piano-server
+      labels:
+        app: p2piano-server
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: p2piano-server
+          image: ghcr.io/d-rowe/p2piano-server:latest@sha256:1b0edc30dd7753271d54e351bcc33a651da868c9023bffdb7236382b02a42970
+          imagePullPolicy: Always
+          env:
+            - name: DB_URL
+              value: 192.168.0.227
+            - name: NODE_ENV
+              value: production
+          ports:
+            - containerPort: 3001

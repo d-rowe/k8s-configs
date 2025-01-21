@@ -39,11 +39,17 @@ spec:
         - mountPath: /data/media
           name: media
           readOnly: True
+        - mountPath: /data/home
+          name: home
+          readOnly: True
         - mountPath: /config
           name: jellyfin-config
       restartPolicy: Always
       volumes:
       - name: media
+        persistentVolumeClaim:
+          claimName: pvc-media
+      - name: home
         persistentVolumeClaim:
           claimName: 	pvc-networkdisk-smbshare
       - name: jellyfin-config
